@@ -4,7 +4,10 @@ import theme from 'styles/theme'
 export const Base = styled.div`
   ${() => css`
     height: 100vh;
-    background-color: ${theme.colors.soft_blue};
+    background: linear-gradient(
+      ${theme.colors.soft_pink},
+      ${theme.colors.soft_blue}
+    );
     -webkit-background: linear-gradient(
       left,
       ${theme.colors.soft_pink},

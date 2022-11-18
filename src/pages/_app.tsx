@@ -1,4 +1,5 @@
 import { AppProps } from 'next/app'
+import { ToastContainer } from 'react-toastify'
 import { ThemeProvider } from 'styled-components'
 
 import GlobalStyles from 'styles/global'
@@ -9,6 +10,7 @@ function App({ Component, pageProps }: AppProps) {
     <ThemeProvider theme={theme}>
       <GlobalStyles />
       <Component {...pageProps} />
+      <ToastContainer />
     </ThemeProvider>
   )
 }
