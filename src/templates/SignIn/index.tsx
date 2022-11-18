@@ -3,11 +3,12 @@ import Form from 'components/Form'
 import Input from 'components/Input'
 import Title from 'components/Title'
 import React, { useEffect, useReducer } from 'react'
-import formReducer from 'reducers/signUpFormReducer'
+import formReducer from 'reducers/signInFormReducer'
 import { useRouter } from 'next/router'
 import { api } from 'services/setupApi'
 import BaseAuth from 'templates/BaseAuth'
 import { toast } from 'react-toastify'
+import Cookies from 'js-cookie'
 import 'react-toastify/dist/ReactToastify.css'
 
 export default function SignUp() {
@@ -15,10 +16,8 @@ export default function SignUp() {
   const formInitialState = {
     username_value: '',
     password_value: '',
-    confirmPassword_value: '',
     username_isValid: false,
     password_isValid: false,
-    confirmPassword_isValid: false,
     form_isValid: false
   }
   const [formState, dispatchForm] = useReducer(formReducer, formInitialState)
@@ -43,19 +42,6 @@ export default function SignUp() {
     dispatchForm({ type: 'PASSWORD_BLUR', val: formState.password_value })
   }
 
-  const confirmPasswordChangeHandler = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    dispatchForm({ type: 'CONFIRM_PASSWORD_INPUT', val: event.target.value })
-  }
-
-  const confirmPasswordValidateHandler = () => {
-    dispatchForm({
-      type: 'CONFIRM_PASSWORD_INPUT',
-      val: formState.confirmPassword_value
-    })
-  }
-
   const submitHandler = async (event: React.FormEvent) => {
     event.preventDefault()
     try {
@@ -63,21 +49,21 @@ export default function SignUp() {
         username: formState.username_value,
         password: formState.password_value
       }
-      const response = await api.post(`users`, body)
+      const response = await api.post(`auth`, body)
 
-      if (response)
-        toast.success('Cadastro realizado com sucesso', {
-          position: 'top-center',
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'light'
-        })
+      Cookies.set('auth_token', response.data.access_token)
+      toast.success('Login realizado com sucesso', {
+        position: 'top-center',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light'
+      })
 
-      router.push('/sign-in')
+      router.push('/')
     } catch (e: any) {
       toast.error(`Aconteceu um erro: ${e.response.data.message}`, {
         position: 'top-center',
@@ -96,7 +82,7 @@ export default function SignUp() {
     <BaseAuth>
       <Form onSubmit={submitHandler}>
         <Title size="sTitle" color="purple">
-          Sign Up
+          Sign In
         </Title>
         <Input
           inputChangeHandler={usernameChangeHandler}
@@ -112,22 +98,10 @@ export default function SignUp() {
           placeholder="Senha"
           type="password"
         />
-
-        <Input
-          inputChangeHandler={confirmPasswordChangeHandler}
-          onBlur={confirmPasswordValidateHandler}
-          isValid={formState.confirmPassword_isValid}
-          placeholder="Nova senha"
-          type="password"
-        />
         <Button
-          disabled={
-            !formState.confirmPassword_isValid ||
-            !formState.password_isValid ||
-            !formState.username_isValid
-          }
+          disabled={!formState.password_isValid || !formState.username_isValid}
         >
-          Cadastrar
+          Entrar
         </Button>
       </Form>
     </BaseAuth>
