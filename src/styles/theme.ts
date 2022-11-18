@@ -9,7 +9,8 @@ export default {
     dark_gray: '#C8C8C8',
     soft_red: '#ff544e',
     medium_red: '#fef3f',
-    dark_red: '#ea2831'
+    dark_red: '#ea2831',
+    medium_yellow: '#FFC000'
   },
   font: {
     family: "'Nunito Sans', sans-serif",
