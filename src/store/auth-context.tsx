@@ -62,8 +62,8 @@ export const UserContextProvider = (props: any) => {
       if (e.message === 'Network Error') {
         return toast.error('Servidor offline')
       }
-
-      toast.error(`Aconteceu um erro: ${e.response}`, {})
+      if (e.response.data.message)
+        return toast.error(`Aconteceu um erro: ${e.response.data.message}`, {})
 
       return false
     }
