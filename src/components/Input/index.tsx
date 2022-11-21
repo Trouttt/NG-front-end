@@ -8,6 +8,10 @@ type ListProps = {
   onBlur: (value: React.ChangeEvent<HTMLInputElement>) => void
   type: string
   isValid: boolean
+  prefix?: string
+  defaultValue?: number
+  decimalsLimit?: number
+  name?: string
   disabled?: boolean
 }
 
@@ -15,8 +19,12 @@ export default function Input({
   placeholder,
   inputChangeHandler,
   isValid,
+  prefix,
   type,
-  onBlur
+  defaultValue,
+  decimalsLimit,
+  onBlur,
+  ...props
 }: ListProps) {
   const [showPassword, setShowPassword] = useState(false)
 
@@ -37,7 +45,7 @@ export default function Input({
           type={type}
           placeholder={placeholder}
         ></S.Input>
-      ) : (
+      ) : type === 'password' ? (
         <>
           <S.Input
             onBlur={onBlur}
@@ -52,6 +60,16 @@ export default function Input({
               {!showPassword && <BsEyeFill size={20} />}
             </S.IconContainer>
           </S.Button>
+        </>
+      ) : (
+        <>
+          <S.Input
+            onBlur={onBlur}
+            isValid={isValid}
+            placeholder={placeholder}
+            onChange={inputChangeHandler}
+            type="money"
+          ></S.Input>
         </>
       )}
     </S.Container>

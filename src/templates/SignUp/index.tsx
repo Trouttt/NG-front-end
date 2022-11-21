@@ -5,7 +5,7 @@ import Title from 'components/Title'
 import React, { useEffect, useReducer } from 'react'
 import formReducer from 'reducers/signUpFormReducer'
 import { useRouter } from 'next/router'
-import { api } from 'services/setupApi'
+import { api } from 'services/api'
 import BaseAuth from 'templates/BaseAuth'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -79,16 +79,10 @@ export default function SignUp() {
 
       router.push('/sign-in')
     } catch (e: any) {
-      toast.error(`Aconteceu um erro: ${e.response.data.message}`, {
-        position: 'top-center',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'light'
-      })
+      if (e.message === 'Network Error') {
+        return toast.error('Servidor offline')
+      }
+      toast.error(`Aconteceu um erro: ${e.response.data.message}`)
     }
   }
 
